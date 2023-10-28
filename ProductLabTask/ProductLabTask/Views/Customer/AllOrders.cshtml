@@ -1,0 +1,21 @@
+﻿
+
+@{
+    ViewBag.Title = "AllOrders";
+}
+
+<h2>AllOrders</h2>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+    </tr>
+    @foreach(var order in Model)
+            {
+                <tr>
+                    <td>@order.Product.Name</td>
+                    <td>@order.Product.Price</td>
+                </tr>
+            }
+</table>
