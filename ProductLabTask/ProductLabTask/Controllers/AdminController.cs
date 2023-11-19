@@ -7,14 +7,43 @@ using System.Web.Mvc;
 
 namespace ProductLabTask.Controllers
 {
-    public class ProductController : Controller
+    public class AdminController : Controller
     {
-        // GET: Product
-        public ActionResult AllProducts()
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(string email, string password)
         {
             var db = new ProductEntities();
-            var data = db.Products;
-            return View(data);
+            var allAdmins = db.Admins.ToList();
+            var data = new Admin();
+            bool sucess = false;
+            foreach (var admin in allAdmins)
+            {
+                if (admin.Email == email && admin.Password == password)
+                {
+                    data = admin;
+                    sucess = true;
+                    Session["id"] = admin.id;
+                }
+            }
+
+            if (sucess)
+            {
+                return RedirectToAction("Home");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+        // GET: Admin
+        public ActionResult Home()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -61,6 +90,13 @@ namespace ProductLabTask.Controllers
             return RedirectToAction("AllProducts");
         }
 
+        public ActionResult AllProducts()
+        {
+            var db = new ProductEntities();
+            var data = db.Products;
+            return View(data);
+        }
+
         public ActionResult AllCategories()
         {
             var db = new ProductEntities();
@@ -81,6 +117,24 @@ namespace ProductLabTask.Controllers
             db.Categories.Add(category);
             db.SaveChanges();
             return RedirectToAction("AllCategories");
+        }
+
+        [HttpGet]
+        public ActionResult allOrders()
+        {
+            var db = new ProductEntities();
+            var data = db.CustomerOrders;
+            return View(data);
+        }
+
+        [HttpGet]
+        public ActionResult confirmOrder(int id)
+        {
+            var db = new ProductEntities();
+            var order = db.CustomerOrders.Find(id);
+            order.Status = "Confirmed";
+            db.SaveChanges();
+            return RedirectToAction("allOrders");
         }
     }
 }

@@ -128,9 +128,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Auth\Logged.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="DTO\AllOrderClass.cs" />
+    <Compile Include="DTO\ProductOrderDTO.cs" />
+    <Compile Include="EF\Admin.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -154,6 +160,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EF\OrderDetail.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\Product.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -182,8 +191,8 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="EF\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
       <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
     </Content>
     <Content Include="EF\Model1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -231,17 +240,20 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Product\AllProducts.cshtml" />
-    <Content Include="Views\Product\AllCategories.cshtml" />
-    <Content Include="Views\Product\createProduct.cshtml" />
-    <Content Include="Views\Product\createCategory.cshtml" />
-    <Content Include="Views\Product\EditProduct.cshtml" />
+    <Content Include="Views\Admin\AllProducts.cshtml" />
+    <Content Include="Views\Admin\AllCategories.cshtml" />
+    <Content Include="Views\Admin\createProduct.cshtml" />
+    <Content Include="Views\Admin\createCategory.cshtml" />
+    <Content Include="Views\Admin\EditProduct.cshtml" />
     <Content Include="Views\Customer\CreateCustomer.cshtml" />
     <Content Include="Views\Customer\Login.cshtml" />
     <Content Include="Views\Customer\Home.cshtml" />
     <Content Include="Views\Customer\ShowProducts.cshtml" />
     <Content Include="Views\Customer\ShowCart.cshtml" />
     <Content Include="Views\Customer\AllOrders.cshtml" />
+    <Content Include="Views\Admin\Home.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Admin\allOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

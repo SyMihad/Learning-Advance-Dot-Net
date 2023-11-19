@@ -12,21 +12,15 @@ namespace ProductLabTask.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class OrderDetail
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
-        {
-            this.OrderDetails = new HashSet<OrderDetail>();
-        }
-    
         public int id { get; set; }
-        public string Name { get; set; }
+        public int OId { get; set; }
+        public int PId { get; set; }
         public int Price { get; set; }
-        public int CatId { get; set; }
+        public int Quantity { get; set; }
     
-        public virtual Category Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual CustomerOrder CustomerOrder { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

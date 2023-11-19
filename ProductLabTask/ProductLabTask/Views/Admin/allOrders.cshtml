@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "allOrders";
+}
+
+<h2>allOrders</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Order ID
+        </th>
+        <th>
+            Customer ID
+        </th>
+        <th>
+            Order Details
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.id</td>
+                    <td>@order.CId</td>
+                    <td>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    Product ID
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Quantity
+                                </th>
+                            </tr>
+                            @foreach (var details in order.OrderDetails)
+                            {
+                                <tr>
+                                    <td>@details.PId</td>
+                                    <td>@details.Price</td>
+                                    <td>@details.Quantity</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td>@order.Date</td>
+                    <td>@order.Status</td>
+                    <td>@Html.ActionLink("Confirm", "confirmOrder", new { id = order.id })</td>
+                </tr>
+            }
+    
+</table>
+

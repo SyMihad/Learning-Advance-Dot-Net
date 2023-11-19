@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductLabTask.EF.Product>
+﻿
 
 @{
     ViewBag.Title = "ShowCart";
@@ -9,30 +9,45 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-    </tr>
-}
+<form action="@Url.Action("ConfirmOrders", "Customer")" method="post">
+    <table class="table">
+        <tr>
+            <th>
+                Pid
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+        </tr>
 
-</table>
+        @foreach (var item in Model.AllOrders)
+        {
+            
+            <tr>
+                <td>
+                    <input type="text" name="AllOrders[@item.Pid].Pid" value="@item.Pid" />
+                </td>
+                <td>
+                    <input type="text" name="AllOrders[@item.Pid].Name" value="@item.Name" />
+                </td>
+                <td>
+                    <input type="text" name="AllOrders[@item.Pid].Price" value="@item.Price" />
+                </td>
+                <td>
+                    <input type="number" name="AllOrders[@item.Pid].Quantity" value="@(item.Quantity)" />
+                </td>
+            </tr>
+        }
+        
+    </table>
 
-<form action="/customer/ConfirmOrders" method="post">
+
     <input type="submit" value="Confirm Order" class="btn btn-danger" />
 </form>

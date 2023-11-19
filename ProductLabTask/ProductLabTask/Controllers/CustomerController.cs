@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using ProductLabTask.Auth;
+using ProductLabTask.DTO;
 
 namespace ProductLabTask.Controllers
 {
@@ -15,7 +17,7 @@ namespace ProductLabTask.Controllers
         {
             return View();
         }
-
+        
         [HttpPost]
         public ActionResult CreateCustomer(Customer customer)
         {
@@ -62,6 +64,7 @@ namespace ProductLabTask.Controllers
             return View();
         }
 
+        [Logged]
         public ActionResult ShowProducts()
         {
             var db = new ProductEntities();
@@ -96,8 +99,9 @@ namespace ProductLabTask.Controllers
         public ActionResult ShowCart()
         {
             var db = new ProductEntities();
+            AllOrderClass allOrderClass = new AllOrderClass();
             List<Product> allProducts = db.Products.ToList();
-            List<Product> cartProducts = new List<Product>();
+            List<ProductOrderDTO> cartProducts = new List<ProductOrderDTO>();
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             HttpCookie ExistingCookie = Request.Cookies["CartCookie"];
             if (ExistingCookie != null)
@@ -110,11 +114,17 @@ namespace ProductLabTask.Controllers
                     {
                         if(product.id == id)
                         {
-                            cartProducts.Add(product);
+                            ProductOrderDTO productOrderDTO = new ProductOrderDTO();
+                            productOrderDTO.Pid = product.id;
+                            productOrderDTO.Name = product.Name;
+                            productOrderDTO.Price = product.Price;
+                            productOrderDTO.Quantity = 1;
+                            cartProducts.Add(productOrderDTO);
                         }
                     }
                 }
-                return View(cartProducts);
+                allOrderClass.AllOrders = cartProducts;
+                return View(allOrderClass);
             }
             else
             {
@@ -123,26 +133,27 @@ namespace ProductLabTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult ConfirmOrders()
+        public ActionResult ConfirmOrders(AllOrderClass allOrderClass)
         {
-            var db = new ProductEntities();
-            List<CustomerOrder> allOrders = new List<CustomerOrder>();
+            /*var db = new ProductEntities();
+            CustomerOrder customerOrder = new CustomerOrder();
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             HttpCookie ExistingCookie = Request.Cookies["CartCookie"];
             if (ExistingCookie != null)
             {
+
                 string cookieValue = ExistingCookie.Value;
                 List<int> oldValues = serializer.Deserialize<List<int>>(cookieValue);
                 foreach (int id in oldValues)
                 {
-                    CustomerOrder customerOrder = new CustomerOrder();
-                    customerOrder.PId = id;
-                    customerOrder.CId = (int)Session["id"];
-                    allOrders.Add(customerOrder);
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OId = customerOrder.id;
+                    
                 }
-                foreach (CustomerOrder customerOrder in allOrders)
+                foreach (OrderDetail orderDetail in orderDetails)
                 {
-                    db.CustomerOrders.Add(customerOrder);
+                    db.OrderDetails.Add(orderDetail);
                 }
                 db.SaveChanges();
                 return RedirectToAction("AllOrders");
@@ -150,7 +161,28 @@ namespace ProductLabTask.Controllers
             else
             {
                 return RedirectToAction("ShowProducts");
+            }*/
+            var db = new ProductEntities();
+            CustomerOrder customerOrder = new CustomerOrder();
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            customerOrder.CId = (int)Session["id"];
+            customerOrder.Status = "Ordered";
+            customerOrder.Date = DateTime.Now;
+            db.CustomerOrders.Add(customerOrder);
+            db.SaveChanges();
+            int orderId = customerOrder.id;
+
+            foreach(var order in allOrderClass.AllOrders)
+            {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.OId = orderId;
+                orderDetail.PId = order.Pid;
+                orderDetail.Price = order.Price;
+                orderDetail.Quantity = order.Quantity;
+                db.OrderDetails.Add(orderDetail);
             }
+            db.SaveChanges();
+            return RedirectToAction("Home");
         }
 
         public ActionResult AllOrders()

@@ -14,11 +14,19 @@ namespace ProductLabTask.EF
     
     public partial class CustomerOrder
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CustomerOrder()
+        {
+            this.OrderDetails = new HashSet<OrderDetail>();
+        }
+    
         public int id { get; set; }
         public int CId { get; set; }
-        public int PId { get; set; }
+        public string Status { get; set; }
+        public System.DateTime Date { get; set; }
     
         public virtual Customer Customer { get; set; }
-        public virtual Product Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
